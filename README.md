@@ -45,21 +45,6 @@ peeking!
 3. Open `01-getting-started.qmd` and press **Render** (or `Ctrl/Cmd + Shift + K`).
 4. Read the rendered PDF side by side with the source. Do the exercises. Re-render often.
 
-## Sharing with colleagues
-
-The repo is self-contained. To publish it:
-
-```bash
-git init
-git add .
-git commit -m "Typst + Quarto training materials"
-git branch -M main
-git remote add origin https://github.com/<your-user>/typst-quarto-training.git
-git push -u origin main
-```
-
-Rendered PDFs and intermediate `.typ` files are excluded by `.gitignore`, so
-colleagues always render fresh from source.
 
 ## Useful references
 
