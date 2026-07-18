@@ -1,25 +1,28 @@
 ---
 title: "Module 2 — Speaking Typst Inside a .qmd"
-author: "Your Name"
+author: "Inma"
 date: today
 format:
   typst:
     papersize: a4
     margin:
-      x: 2.5cm
-      y: 2.5cm
-    fontsize: 11pt
+      left: 2.5cm
+      right: 2cm 
+      top: 3cm
+      bottom: 2cm
+    
+    mainfont: "arial"
+    fontsize: 12pt
     number-sections: true
     keep-typ: true
+editor: visual
 ---
 
 # Raw Typst blocks
 
-Markdown covers most needs, but sometimes you want direct control. A fenced
-block marked `{=typst}` passes its contents *straight through* to the Typst
-compiler:
+Markdown covers most needs, but sometimes you want direct control. A fenced block marked `{=typst}` passes its contents *straight through* to the Typst compiler:
 
-````markdown
+```` markdown
 ```{=typst}
 #text(fill: red, weight: "bold")[This text is red and bold.]
 ```
@@ -38,31 +41,21 @@ Two things to notice about Typst syntax:
 
 # Styling with `#set` rules
 
-A `#set` rule changes the default of a function *from that point onward*.
-This paragraph break is followed by a set rule that enlarges paragraph
-spacing and justifies text:
+A `#set` rule changes the default of a function *from that point onward*. This paragraph break is followed by a set rule that enlarges paragraph spacing and justifies text:
 
 ```{=typst}
 #set par(justify: true)
 ```
-
-From here on, all paragraphs are justified — note how the right-hand edge of
-this paragraph is now perfectly flush, unlike the ragged paragraphs above.
-Set rules are the workhorse of Typst styling: one line changes the whole
-document from here down.
+From here on, all paragraphs are justified — note how the right-hand edge of this paragraph is now perfectly flush, unlike the ragged paragraphs above. Set rules are the workhorse of Typst styling: one line changes the whole document from here down.
 
 # Transforming with `#show` rules
 
-A `#show` rule *transforms* elements. This one repaints every piece of
-emphasised text in teal:
+A `#show` rule *transforms* elements. This one repaints every piece of emphasised text in teal:
 
 ```{=typst}
-#show emph: set text(fill: rgb("#1f6f8b"))
+#show emph: set text(fill: rgb("#014D4E"), weight: "bold")
 ```
-
-Now *any emphasised text* — written with ordinary Markdown asterisks — comes
-out *teal*. Show rules let you restyle Markdown output without touching the
-Markdown itself.
+Now *any emphasised text* — written with ordinary Markdown asterisks — comes out *teal*. Show rules let you restyle Markdown output without touching the Markdown itself.
 
 # Boxes and callouts, Typst-style
 
@@ -80,19 +73,31 @@ Typst's `#block` and `#rect` make attractive containers:
   Keep the two concerns separate and your documents stay maintainable.
 ]
 ```
-
 Quarto's own callouts also work and are translated to Typst for you:
 
-::: {.callout-note}
-This is a standard Quarto callout. It renders natively in Typst — no extra
-work needed.
+::: callout-note
+This is a standard Quarto callout. It renders natively in Typst — no extra work needed.
+:::
+
+::: callout-tip
+## Callout  tip default
+:::
+
+::: callout-important
+## callout important default
+:::
+
+::: callout-caution
+## caution default
+:::
+
+::: callout-warning
+Warning default
 :::
 
 # Mixing R output with Typst
 
-Important gotcha: inline R code is **not** evaluated inside a raw
-`{=typst}` fence (knitr treats the fence as verbatim). The reliable pattern
-is to *generate* the Typst code from an R chunk with `output: asis`:
+Important gotcha: inline R code is **not** evaluated inside a raw `{=typst}` fence (knitr treats the fence as verbatim). The reliable pattern is to *generate* the Typst code from an R chunk with `output: asis`:
 
 ```{r}
 #| echo: fenced
@@ -109,8 +114,7 @@ cat("```{=typst}\n",
     "```", sep = "")
 ```
 
-The chunk computes values in R, then `cat()`s a raw Typst block into the
-document. Anything you can compute, you can typeset.
+The chunk computes values in R, then `cat()`s a raw Typst block into the document. Anything you can compute, you can typeset.
 
 # Two-column sections
 
@@ -121,35 +125,26 @@ You can switch to multi-column layout mid-document:
   #lorem(60)
 ]
 ```
-
-(`#lorem(n)` generates *n* words of placeholder text — handy for layout
-experiments.)
+(`#lorem(n)` generates *n* words of placeholder text — handy for layout experiments.)
 
 # Exercises
 
 ## 🏋️ Exercise 2.1 — Colour play
 
-Add a raw Typst block that prints your name in 24pt, purple
-(`rgb("#6a0dad")`), centred with `#align(center)[...]`.
+Add a raw Typst block that prints your name in 24pt, purple (`rgb("#6a0dad")`), centred with `#align(center)[...]`.
 
 ## 🏋️ Exercise 2.2 — A show rule for strong text
 
-Write a `#show strong: ...` rule so that all **bold Markdown text** below it
-is rendered in small caps (`smallcaps`) — then write a bold sentence to
-prove it works. Hint: `#show strong: it => smallcaps(it)`.
+Write a `#show strong: ...` rule so that all **bold Markdown text** below it is rendered in small caps (`smallcaps`) — then write a bold sentence to prove it works. Hint: `#show strong: it => smallcaps(it)`.
 
 ## 🏋️ Exercise 2.3 — Design a warning box
 
-Build a "warning" box with `#block`: pale red fill (`rgb("#fdecea")`), a
-3pt red left border, and inset of 10pt. Put a short warning about
-overusing raw Typst inside it.
+Build a "warning" box with `#block`: pale red fill (`rgb("#fdecea")`), a 3pt red left border, and inset of 10pt. Put a short warning about overusing raw Typst inside it.
 
 ## 🏋️ Exercise 2.4 — Data-driven Typst
 
-Using the `output: asis` pattern above, compute the mean of
-`iris$Sepal.Length` in R and display it inside a centred Typst statistic
-box like the mtcars example.
+Using the `output: asis` pattern above, compute the mean of `iris$Sepal.Length` in R and display it inside a centred Typst statistic box like the mtcars example.
 
-::: {.callout-tip}
+::: callout-tip
 Solutions in `solutions/02-solutions.qmd`.
 :::
