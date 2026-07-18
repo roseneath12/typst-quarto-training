@@ -1,0 +1,87 @@
+---
+title: "Module 3 — Solutions"
+format:
+  typst:
+    papersize: a4
+    margin:
+      x: 2.5cm
+      y: 2.5cm
+    number-sections: true
+fig-format: png
+fig-dpi: 300
+---
+
+```{r}
+#| label: setup
+#| include: false
+library(knitr)
+library(ggplot2)
+```
+
+# Exercise 3.1 — A referenced table
+
+```{r}
+#| label: tbl-air
+#| tbl-cap: "New York air quality, May 1973."
+kable(head(airquality[airquality$Month == 5, c("Ozone", "Temp", "Wind")]))
+```
+
+As @tbl-air shows, early-May ozone readings were modest.
+
+# Exercise 3.2 — A referenced figure
+
+```{r}
+#| label: fig-air
+#| fig-cap: "Ozone rises sharply with temperature."
+#| fig-width: 6
+#| fig-height: 3.5
+#| warning: false
+ggplot(airquality, aes(Temp, Ozone)) +
+  geom_point(colour = "#1f6f8b", alpha = 0.7) +
+  geom_smooth(method = "loess", se = FALSE, colour = "grey40",
+              formula = y ~ x) +
+  labs(x = "Temperature (°F)", y = "Ozone (ppb)") +
+  theme_minimal(base_size = 12)
+```
+
+@fig-air suggests a strongly non-linear relationship.
+
+# Exercise 3.3 — Three-across layout
+
+::: {layout-ncol=3}
+```{r}
+#| fig-height: 4
+hist(iris$Sepal.Length, main = "Sepal length", col = "#1f6f8b",
+     border = "white", xlab = "cm")
+```
+
+```{r}
+#| fig-height: 4
+hist(iris$Sepal.Width, main = "Sepal width", col = "#1f6f8b",
+     border = "white", xlab = "cm")
+```
+
+```{r}
+#| fig-height: 4
+hist(iris$Petal.Length, main = "Petal length", col = "#1f6f8b",
+     border = "white", xlab = "cm")
+```
+:::
+
+# Exercise 3.4 — Two-column notes
+
+Setting `columns: 2` in the YAML narrows every text block to half width.
+Wide tables overflow. Two fixes that work well together:
+
+1. Show fewer columns: `mtcars[, c("mpg", "cyl", "wt")]`.
+2. Shrink table text with a raw Typst rule before the table:
+
+```{=typst}
+#show table: set text(size: 8pt)
+```
+
+```{r}
+#| label: tbl-narrow
+#| tbl-cap: "A table slimmed down to fit a narrow column."
+kable(head(mtcars[, c("mpg", "cyl", "wt")]), digits = 1)
+```

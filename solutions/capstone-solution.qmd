@@ -1,0 +1,128 @@
+---
+title: "New York Air Quality, Summer 1973"
+subtitle: "Capstone worked solution"
+author: "Jane Trainer"
+date: today
+format:
+  typst:
+    papersize: a4
+    margin:
+      x: 2.5cm
+      y: 2.5cm
+    fontsize: 10pt
+    mainfont: "Libertinus Serif"
+    toc: true
+    number-sections: true
+fig-format: png
+fig-dpi: 300
+---
+
+```{=typst}
+#show heading.where(level: 1): set text(fill: rgb("#1f6f8b"))
+#set par(justify: true)
+```
+
+```{r}
+#| label: setup
+#| include: false
+library(knitr)
+library(ggplot2)
+aq <- na.omit(airquality)
+aq$MonthName <- factor(month.name[aq$Month], levels = month.name[5:9])
+```
+
+# Key findings
+
+```{=typst}
+#block(
+  fill: rgb("#eef6f8"),
+  stroke: (left: 3pt + rgb("#1f6f8b")),
+  inset: 10pt,
+  radius: 4pt,
+  width: 100%,
+)[
+  *In brief.* Ozone pollution peaked in July and August, tracks temperature
+  strongly and non-linearly, and is moderated by wind. August 25 recorded
+  the summer's worst reading.
+]
+```
+
+```{r}
+#| label: headline-stat
+#| output: asis
+#| echo: false
+i <- which.max(aq$Ozone)
+cat("```{=typst}\n",
+    "#align(center)[",
+    "#block(fill: rgb(\"#fff4e6\"), inset: 12pt, radius: 6pt)[",
+    "#text(size: 20pt, weight: \"bold\")[", aq$Ozone[i], " ppb]\n\n",
+    "Peak ozone, recorded on ", aq$MonthName[i], " ", aq$Day[i],
+    "]]\n```", sep = "")
+```
+
+# Monthly summary
+
+```{r}
+#| label: tbl-monthly
+#| tbl-cap: "Monthly means of ozone, temperature and wind speed."
+monthly <- aggregate(cbind(Ozone, Temp, Wind) ~ MonthName, aq, mean)
+names(monthly)[1] <- "Month"
+kable(monthly, digits = 1)
+```
+
+@tbl-monthly shows the mid-summer peak: mean ozone in July and August was
+roughly triple the May level, coinciding with the warmest temperatures and
+the calmest winds of the season.
+
+# Ozone and temperature
+
+```{r}
+#| label: fig-ozone-temp
+#| fig-cap: "Ozone concentration versus daily maximum temperature."
+#| fig-width: 6
+#| fig-height: 3.5
+ggplot(aq, aes(Temp, Ozone)) +
+  geom_point(aes(colour = MonthName), alpha = 0.8) +
+  geom_smooth(method = "loess", se = FALSE, colour = "grey30",
+              formula = y ~ x) +
+  labs(x = "Temperature (°F)", y = "Ozone (ppb)", colour = NULL) +
+  theme_minimal(base_size = 11) +
+  theme(legend.position = "bottom")
+```
+
+@fig-ozone-temp shows ozone is flat below about 80 °F, then climbs steeply —
+consistent with photochemical ozone formation accelerating in heat.
+
+# Two moderating factors
+
+::: {layout-ncol=2}
+```{r}
+#| label: fig-wind
+#| fig-cap: "Wind disperses ozone."
+#| fig-height: 4
+ggplot(aq, aes(Wind, Ozone)) +
+  geom_point(colour = "#1f6f8b", alpha = 0.7) +
+  geom_smooth(method = "loess", se = FALSE, colour = "grey30",
+              formula = y ~ x) +
+  labs(x = "Wind (mph)", y = "Ozone (ppb)") +
+  theme_minimal(base_size = 11)
+```
+
+```{r}
+#| label: fig-solar
+#| fig-cap: "Sunlight fuels ozone formation."
+#| fig-height: 4
+ggplot(aq, aes(Solar.R, Ozone)) +
+  geom_point(colour = "#c0392b", alpha = 0.7) +
+  geom_smooth(method = "loess", se = FALSE, colour = "grey30",
+              formula = y ~ x) +
+  labs(x = "Solar radiation (lang)", y = "Ozone (ppb)") +
+  theme_minimal(base_size = 11)
+```
+:::
+
+# Methods note
+
+Analysis uses the base-R `airquality` dataset (153 daily observations,
+May–September 1973, Roosevelt Island / LaGuardia). Rows with missing ozone
+or solar readings were dropped (`na.omit`), leaving `r nrow(aq)` days.

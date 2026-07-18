@@ -1,0 +1,143 @@
+---
+title: "Module 3 — Tables, Figures & Layout"
+author: "Your Name"
+date: today
+format:
+  typst:
+    papersize: a4
+    margin:
+      x: 2.5cm
+      y: 2.5cm
+    fontsize: 11pt
+    number-sections: true
+fig-format: png
+fig-dpi: 300
+---
+
+```{r}
+#| label: setup
+#| include: false
+library(knitr)
+library(ggplot2)
+```
+
+# Tables with `kable()`
+
+`knitr::kable()` output is converted into a native Typst table automatically.
+Captions and cross-reference labels work exactly as in other Quarto formats:
+
+```{r}
+#| label: tbl-mtcars
+#| tbl-cap: "Fuel efficiency of selected cars (mtcars dataset)."
+top5 <- mtcars[order(-mtcars$mpg), c("mpg", "cyl", "wt", "hp")][1:5, ]
+kable(top5, digits = 1)
+```
+
+See @tbl-mtcars for the five most efficient cars — that reference number was
+generated automatically because the chunk label starts with `tbl-`.
+
+# Figures
+
+Plots are embedded as images. Use `fig-cap` for captions and `fig-` labels
+for cross-referencing:
+
+```{r}
+#| label: fig-mpg-wt
+#| fig-cap: "Heavier cars use more fuel."
+#| fig-width: 6
+#| fig-height: 3.5
+ggplot(mtcars, aes(wt, mpg)) +
+  geom_point(colour = "#1f6f8b", size = 3) +
+  geom_smooth(method = "lm", se = FALSE, colour = "grey40",
+              formula = y ~ x) +
+  labs(x = "Weight (1000 lbs)", y = "Miles per gallon") +
+  theme_minimal(base_size = 12)
+```
+
+@fig-mpg-wt shows the classic weight–efficiency relationship.
+
+# Side-by-side layout
+
+Quarto's layout attributes work in Typst. Two plots in one row:
+
+::: {layout-ncol=2}
+```{r}
+#| label: fig-iris-a
+#| fig-cap: "Sepal dimensions."
+#| fig-height: 4
+ggplot(iris, aes(Sepal.Length, Sepal.Width, colour = Species)) +
+  geom_point() + theme_minimal() + theme(legend.position = "bottom")
+```
+
+```{r}
+#| label: fig-iris-b
+#| fig-cap: "Petal dimensions."
+#| fig-height: 4
+ggplot(iris, aes(Petal.Length, Petal.Width, colour = Species)) +
+  geom_point() + theme_minimal() + theme(legend.position = "bottom")
+```
+:::
+
+# Styling tables with Typst show rules
+
+You can restyle *all* tables in one stroke with a raw Typst show rule.
+This one adds a subtle striped background:
+
+```{=typst}
+#set table(
+  stroke: 0.5pt + rgb("#b0c4cc"),
+  fill: (_, y) => if y > 0 and calc.odd(y) { rgb("#f2f7f9") },
+)
+#show table.cell.where(y: 0): strong
+```
+
+```{r}
+#| label: tbl-tooth
+#| tbl-cap: "Tooth growth by supplement (first rows)."
+kable(head(ToothGrowth, 6))
+```
+
+(If a show rule ever misbehaves, remember `keep-typ: true` lets you inspect
+exactly what Typst received.)
+
+# Full-width elements in narrow layouts
+
+If your document uses `columns: 2`, a raw Typst `#place` or Quarto's
+`.column-page` div can break out. Simplest tool: Typst's page-spanning
+figure placement:
+
+````markdown
+```{=typst}
+#figure(placement: top, ...)
+```
+````
+
+We keep this document single-column, but try it in Exercise 3.4.
+
+# Exercises
+
+## 🏋️ Exercise 3.1 — A referenced table
+
+Create a table of the first 6 rows of `airquality` (columns `Ozone`,
+`Temp`, `Wind` only), give it the caption "New York air quality, May 1973",
+label it `tbl-air`, and reference it from a sentence.
+
+## 🏋️ Exercise 3.2 — A referenced figure
+
+Plot `Temp` against `Ozone` from `airquality` with a smoother, caption it,
+label it `fig-air`, and reference it in text.
+
+## 🏋️ Exercise 3.3 — Three-across layout
+
+Use `::: {layout-ncol=3}` to place three histograms of `iris` measurements
+side by side.
+
+## 🏋️ Exercise 3.4 — Two-column report page
+
+Copy this file, set `columns: 2` in the YAML, and re-render. Observe what
+happens to wide tables — then shrink the mtcars table (fewer columns, or
+`fontsize` via a Typst set rule) until it fits a column.
+
+::: {.callout-tip}
+Solutions in `solutions/03-solutions.qmd`.
+:::

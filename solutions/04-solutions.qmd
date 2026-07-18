@@ -1,0 +1,69 @@
+---
+title: "Module 4 — Solutions"
+subtitle: "Rendered through the solved template"
+author: "Jane Trainer"
+date: today
+format:
+  typst:
+    template-partials:
+      - templates-solved/typst-template.typ
+      - templates-solved/typst-show.typ
+    papersize: a4
+---
+
+# Where the answers live
+
+Exercises 4.1–4.3 are edits to the template itself, so the finished files
+are in `solutions/templates-solved/`. This document renders through them,
+so you can *see* every answer in the output:
+
+- **4.1 Rebrand.** The default in `typst-template.typ` is now
+  `brand-color: rgb("#8b1f2d")` — this document sets no `brand-color` in
+  its YAML, yet the title and headings are dark red. A document *can*
+  still override it from YAML because `typst-show.typ` only passes the
+  argument when the key exists.
+
+- **4.2 Footer.** Look at the bottom of this page: document title on the
+  left, page number on the right. In the template it is:
+
+  ````
+  set page(
+    ...,
+    footer: context [
+      #text(size: 9pt, fill: luma(120))[#title]
+      #h(1fr)
+      #text(size: 9pt, fill: luma(120))[#counter(page).display()]
+    ],
+  )
+  ````
+
+- **4.3 Subtitle.** The subtitle above is italic, grey and 14pt:
+  `#text(size: 14pt, style: "italic", fill: luma(120))[#subtitle]`.
+
+- **4.4 Project-wide format.** Create `_quarto.yml` beside your `.qmd`
+  files containing:
+
+  ````yaml
+  format:
+    typst:
+      template-partials:
+        - templates/typst-template.typ
+        - templates/typst-show.typ
+      papersize: a4
+  ````
+
+  Then any `.qmd` in the folder needs no `format:` block at all — Quarto
+  merges the project settings automatically. (We deliberately do **not**
+  ship a `_quarto.yml` in this repo root, so the earlier modules keep
+  their self-contained headers for teaching purposes.)
+
+# Proof the template styles content
+
+*Emphasised text* takes the brand colour, and tables get the header
+treatment:
+
+```{r}
+#| label: tbl-proof
+#| tbl-cap: "Styled by the template, not by this file."
+knitr::kable(head(ToothGrowth, 4))
+```

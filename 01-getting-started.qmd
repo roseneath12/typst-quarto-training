@@ -1,0 +1,92 @@
+---
+title: "Module 1 — Your First Typst Document"
+author: "Your Name"
+date: today
+format:
+  typst:
+    papersize: a4
+    margin:
+      x: 2.5cm
+      y: 2.5cm
+    fontsize: 11pt
+    toc: true
+    number-sections: true
+---
+
+# Welcome
+
+You just rendered a PDF **without LaTeX**. The line `format: typst` in the
+YAML header above told Quarto to use its bundled Typst engine. Rendering
+should have taken about a second — that speed is the point.
+
+Everything you already know about Quarto still applies: Markdown text,
+R code chunks, YAML options. Typst only changes *how the PDF is produced*.
+
+# How rendering works
+
+When you press **Render**, this happens:
+
+1. `knitr` runs your R chunks and produces Markdown.
+2. Pandoc converts the Markdown to a `.typ` file (Typst source).
+3. Quarto's bundled Typst compiler turns `.typ` into PDF.
+
+You can inspect the intermediate Typst source — very useful for learning —
+by adding `keep-typ: true` under the `typst:` key.
+
+# R code works as usual
+
+```{r}
+#| label: first-chunk
+#| echo: true
+head(mtcars, 4)
+```
+
+And inline code too: the `mtcars` dataset has `r nrow(mtcars)` rows and
+`r ncol(mtcars)` columns. Mean fuel efficiency is
+`r round(mean(mtcars$mpg), 1)` mpg.
+
+# The YAML options that matter
+
+These go under `format: typst:` in the header:
+
+| Option | Example | What it does |
+|---|---|---|
+| `papersize` | `a4`, `us-letter`, `a5` | Page size |
+| `margin` | `x: 2cm`, `y: 3cm` (or `top`, `bottom`, `left`, `right`) | Margins |
+| `fontsize` | `10pt`, `11pt` | Base font size |
+| `mainfont` | `"Libertinus Serif"` | Body font (any font Typst can see) |
+| `columns` | `2` | Multi-column body text |
+| `toc` | `true` | Table of contents |
+| `number-sections` | `true` | Numbered headings |
+| `keep-typ` | `true` | Keep the intermediate `.typ` file |
+
+# Exercises
+
+Complete each exercise by editing **this file** and re-rendering.
+
+## 🏋️ Exercise 1.1 — Make it yours
+
+Change `author` to your real name, and change the `date` from `today` to a
+fixed date such as `"2026-07-18"`. Re-render and check the title block.
+
+## 🏋️ Exercise 1.2 — Page geometry
+
+Change the paper size to `us-letter` and set asymmetric margins:
+`left: 4cm`, `right: 2cm`, `top: 2.5cm`, `bottom: 2.5cm`.
+(Replace the `x:` / `y:` shorthand.)
+
+## 🏋️ Exercise 1.3 — Typography
+
+Set `fontsize: 10pt` and `mainfont: "Libertinus Sans"` (a font bundled with
+Typst). Notice the entire document switch to a sans-serif face.
+
+## 🏋️ Exercise 1.4 — Look under the bonnet
+
+Add `keep-typ: true`, re-render, and open the generated
+`01-getting-started.typ` file in RStudio. Find where your heading
+"Welcome" appears in Typst syntax. Don't worry about understanding it all
+yet — that's Module 2.
+
+::: {.callout-tip}
+Solutions for all exercises are in `solutions/01-solutions.qmd`.
+:::

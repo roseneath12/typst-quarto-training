@@ -1,0 +1,56 @@
+---
+title: "Capstone — Air Quality Briefing"
+author: "Your Name"
+date: today
+format:
+  typst:
+    papersize: a4
+    margin:
+      x: 2.5cm
+      y: 2.5cm
+---
+
+# Your mission
+
+Using everything from Modules 1–4, turn this skeleton into a polished
+two-page briefing on the built-in `airquality` dataset (daily air quality
+measurements in New York, May–September 1973). A finished example is in
+`solutions/capstone-solution.qmd` — but build yours first.
+
+# Requirements checklist
+
+Your rendered PDF must include:
+
+1. **Document setup** (Module 1)
+   - [ ] A table of contents and numbered sections
+   - [ ] A body font of your choice and 10pt base size
+
+2. **Typst styling** (Module 2)
+   - [ ] A `#show` rule that colours all level-1 headings
+   - [ ] A key-findings box built with `#block` (fill + border + inset)
+   - [ ] One statistic computed in R and typeset via the `output: asis`
+         pattern (e.g. the maximum ozone reading and its date)
+
+3. **Tables & figures** (Module 3)
+   - [ ] A cross-referenced summary table (`tbl-` label) of monthly mean
+         `Ozone`, `Temp` and `Wind`
+   - [ ] A cross-referenced figure (`fig-` label) showing ozone vs
+         temperature with a smoother
+   - [ ] Two plots side by side using `layout-ncol`
+
+4. **Stretch goal** (Module 4)
+   - [ ] Render the whole thing through the `templates/` partials instead
+         of inline styling (adjust the relative path:
+         `../templates/typst-template.typ`)
+
+# Data starter
+
+```{r}
+#| label: starter
+#| echo: true
+aq <- na.omit(airquality)
+aq$MonthName <- month.name[aq$Month]
+head(aq, 3)
+```
+
+Good luck — and remember `keep-typ: true` is your debugger.

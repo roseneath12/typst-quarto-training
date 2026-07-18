@@ -1,0 +1,16 @@
+# Rendered outputs — colleagues render fresh from source
+*.pdf
+*.typ
+!templates/*.typ
+!solutions/templates-solved/*.typ
+
+# Quarto / knitr intermediates
+/.quarto/
+*_files/
+*_cache/
+
+# R / RStudio
+.Rproj.user/
+.Rhistory
+.RData
+.Rproj.user

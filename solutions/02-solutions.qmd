@@ -1,0 +1,58 @@
+---
+title: "Module 2 — Solutions"
+format:
+  typst:
+    papersize: a4
+    margin:
+      x: 2.5cm
+      y: 2.5cm
+---
+
+# Exercise 2.1 — Colour play
+
+```{=typst}
+#align(center)[
+  #text(size: 24pt, fill: rgb("#6a0dad"), weight: "bold")[Jane Trainer]
+]
+```
+
+# Exercise 2.2 — Show rule for strong text
+
+```{=typst}
+#show strong: it => smallcaps(it)
+```
+
+**This bold sentence is now rendered in small caps.** Every bold passage
+after the show rule is transformed the same way.
+
+# Exercise 2.3 — Warning box
+
+```{=typst}
+#block(
+  fill: rgb("#fdecea"),
+  stroke: (left: 3pt + rgb("#c0392b")),
+  inset: 10pt,
+  radius: 4pt,
+  width: 100%,
+)[
+  *Warning.* Raw Typst is powerful, but scattering it through a document
+  makes maintenance hard. Prefer set/show rules near the top — or better,
+  a shared template (Module 4).
+]
+```
+
+# Exercise 2.4 — Data-driven Typst
+
+```{r}
+#| echo: fenced
+#| output: asis
+m <- round(mean(iris$Sepal.Length), 2)
+
+cat("```{=typst}\n",
+    "#align(center)[",
+    "#block(fill: rgb(\"#eef6f8\"), inset: 12pt, radius: 6pt)[",
+    "#text(size: 20pt, weight: \"bold\")[", m, " cm]\n\n",
+    "Mean sepal length across all 150 iris flowers",
+    "]]\n",
+    "```", sep = "")
+```
