@@ -1,7 +1,7 @@
 ---
-title: "Module 1 — Your First Typst Document"
+title: "Module 1 — My First Typst Document"
 author: "Inma"
-date: today
+date:  "2026-07-18"
 format:
   typst:
     papersize: a4
@@ -10,10 +10,12 @@ format:
       right: 2cm 
       top: 3cm
       bottom: 2cm
-      
-    fontsize: 11pt
+    
+    mainfont: "arial"
+    fontsize: 12pt
     toc: true
     number-sections: true
+    keep-typ:  true
 ---
 
 # Welcome
@@ -47,7 +49,7 @@ And inline code too: the `mtcars` dataset has `r nrow(mtcars)` rows and `r ncol(
 These go under `format: typst:` in the header:
 
 | Option | Example | What it does |
-|----|----|----|
+|------------------------|------------------------|------------------------|
 | `papersize` | `a4`, `us-letter`, `a5` | Page size |
 | `margin` | `x: 2cm`, `y: 3cm` (or `top`, `bottom`, `left`, `right`) | Margins |
 | `fontsize` | `10pt`, `11pt` | Base font size |
